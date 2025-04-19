@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
@@ -26,10 +26,12 @@ export const GET_ALL_USERS = gql`
 
 export const GET_LABELS = gql`
   query GetLabels {
-    labels {
-      id
+    listGmailLabels {
       name
-      color
+      id
+      type
+      messageListVisibility
+      labelListVisibility
     }
   }
 `;

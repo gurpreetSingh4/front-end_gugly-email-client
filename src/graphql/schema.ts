@@ -11,8 +11,11 @@ export interface User {
 export interface Label {
   id: number;
   name: string;
-  color: string;
-  userId: number;
+  color?: string;
+  userId?: number;
+  type?: String;
+  messageListVisibility?: String;
+  labelListVisibility?: String;
 }
 
 export interface EmailSender {

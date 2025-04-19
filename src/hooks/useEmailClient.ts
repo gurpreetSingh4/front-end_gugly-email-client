@@ -423,12 +423,13 @@ export function useEmailClient() {
   // Local state for users (when Apollo fails)
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [allUsers, setAllUsers] = useState<any[]>([]);
+  console.log("ye h label",labelsData?.listGmailLabels)
   
   return {
     // Data
     emails: emailsData?.emails || emails || [],
     selectedEmail,
-    labels: labelsData?.labels || labels || [],
+    labels: labelsData?.listGmailLabels || labels || [],
     selectedFolder,
     selectedLabelId,
     searchQuery,
