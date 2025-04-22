@@ -25,7 +25,6 @@ interface User {
   name: string;
   email: string;
   avatar?: string;
-  username: string;
 }
 
 interface SearchFilters {

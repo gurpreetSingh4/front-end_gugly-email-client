@@ -4,7 +4,6 @@ export const GET_CURRENT_USER = gql`
   query GetCurrentUser {
     currentUser {
       id
-      username
       email
       name
       avatar
@@ -16,7 +15,6 @@ export const GET_ALL_USERS = gql`
   query GetAllUsers {
     users {
       id
-      username
       email
       name
       avatar

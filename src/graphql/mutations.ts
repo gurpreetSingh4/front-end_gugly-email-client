@@ -109,7 +109,6 @@ export const SWITCH_USER = gql`
   mutation SwitchUser($userId: ID!) {
     switchUser(userId: $userId) {
       id
-      username
       email
       name
       avatar

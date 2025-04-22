@@ -1,4 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
+import axios from "axios"
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 console.log(BASE_URL)
@@ -10,22 +11,22 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-// export async function apiRequest(
-//   method: string,
-//   url: string,
-//   data?: unknown | undefined,
-// ): Promise<Response> {
-//   const res = await fetch(url, {
-//     method,
-//     headers: data ? { "Content-Type": "application/json" } : {},
-//     body: data ? JSON.stringify(data) : undefined,
-//     credentials: "include",
-//   });
 
-//   await throwIfResNotOk(res);
-//   return res;
-// }
-
+export async function apiRequestAxios(
+  method: string,
+  url: string,
+  data?: unknown
+) {
+  if(!url){
+    return null;
+  }
+  const response = await axios({
+    method,
+    url,
+    data,
+  });
+  return response;
+}
 
 export async function apiRequest(
   method: string = "GET",
@@ -40,12 +41,10 @@ export async function apiRequest(
     body: data ? JSON.stringify(data) : undefined,
     credentials: "include"
   });
-
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`${res.status}: ${text}`);
   }
-
   return res;
 }
 
