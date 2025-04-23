@@ -12,6 +12,7 @@ import NotFound from "./page/not-found";
 import Home from "./page/Home";
 import { AuthProvider, useAuth } from "./hooks/use-auth";
 import OAuthCallback from "./page/OAuthCallback";
+import OAuthGmailCallback from "./page/OAuthGmailCallback";
 
 const AuthPage = lazy(() => import("./page/auth-page"));
 const DashboardPage = lazy(() => import("./page/dashboard_new"));
@@ -109,6 +110,7 @@ function Router() {
       <Route path="/auth" component={Auth} />
       <Route path="/emailclient" component={EmailClient} />
       <Route path="/oauth/callback" component={OAuthCallback} />
+      <Route path="/oauthgmail/callback" component={OAuthGmailCallback} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />
       <ProtectedRoute path="/email" component={EmailDashboard} />
       <Route component={NotFound} />
@@ -138,16 +140,16 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="email-client-theme">
-          <TooltipProvider>
-            <AuthProvider>
+      <ThemeProvider defaultTheme="system" storageKey="email-client-theme">
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <TooltipProvider>
               <Router />
               <Toaster />
-            </AuthProvider>
-          </TooltipProvider>
-        </ThemeProvider>
-      </QueryClientProvider>
+            </TooltipProvider>
+          </AuthProvider>
+        </QueryClientProvider>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

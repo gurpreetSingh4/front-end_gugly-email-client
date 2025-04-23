@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import {
   useQuery,
   useMutation,
@@ -63,12 +69,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     queryKey: ["/api/user", userId],
     enabled: !!userId,
     queryFn: async () => {
-      const res = await apiRequestAxios(
-        "GET",
-        `${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/userinfo?userid=${userId}`
+      const response = await axios.get(
+        `${
+          import.meta.env.VITE_AUTH_SERVICE_URL
+        }/api/auth/userinfo?userid=${userId}`
       );
-      if (!res) return null;
-      const { name, email, profilePicture, _id } = res.data;
+      if (!response || !response.data) throw new Error("Login failed");
+      const { name, email, profilePicture, _id } = response.data.data;
       return {
         id: _id,
         fullName: name,
@@ -94,7 +101,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/user", userData.id], userData);
       toast({
         title: "Login successful",
-        description: `Welcome back${userData.fullName ? ", " + userData.fullName : ""}!`,
+        description: `Welcome back${
+          userData.fullName ? ", " + userData.fullName : ""
+        }!`,
       });
     },
     onError: (error: Error) => {
@@ -122,7 +131,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       queryClient.setQueryData(["/api/user", userData.id], userData);
       toast({
         title: "Registration successful",
-        description: `Welcome to GuglyMail, ${userData.fullName || userData.email}!`,
+        description: `Welcome to GuglyMail, ${
+          userData.fullName || userData.email
+        }!`,
       });
     },
     onError: (error: Error) => {
@@ -137,15 +148,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logoutMutation = useMutation({
     mutationFn: async () => {
       const storedUserId = localStorage.getItem("userId");
-      const res = await axios.post(`${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/logout`, {
-        userId: storedUserId,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/logout`,
+        {
+          userId: storedUserId,
+        }
+      );
       if (!res) throw new Error("Logout failed");
       return res.data;
     },
     onSuccess: (logoutData: LogoutOutput) => {
       localStorage.removeItem("userId");
       sessionStorage.removeItem("userId");
+      localStorage.removeItem("regEmail");
+      sessionStorage.removeItem("regEmail");
+      localStorage.removeItem("regUserId");
+      sessionStorage.removeItem("regUserId");
+
       setUserId(null);
       queryClient.setQueryData(["/api/user"], null);
       toast({
@@ -163,7 +182,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const googleSignIn = () => {
-    window.location.href = `${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/google`;
+    window.location.href = `${
+      import.meta.env.VITE_AUTH_SERVICE_URL
+    }/api/auth/google`;
   };
 
   return (

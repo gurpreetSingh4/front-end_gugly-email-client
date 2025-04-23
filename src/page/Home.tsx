@@ -7,12 +7,12 @@ import Features from "../components/sections/Features";
 import TechStack from "../components/sections/TechStack";
 import Testimonials from "../components/sections/Testimonials";
 import CTA from "../components/sections/CTA";
-// import { useAuth } from "../hooks/use-auth";
+import { useAuth } from "../hooks/use-auth";
 
 const Home = () => {
   const [, navigate] = useLocation();
-  // const { user } = useAuth();
-  const user = false;
+  const { user } = useAuth();
+  // const user = false;
 
   const goToAuth = (tab: "login" | "register" = "login") => {
     if (user) {

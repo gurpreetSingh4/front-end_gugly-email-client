@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "../hooks/use-toast";
 
-export default function OAuthCallback() {
+export default function OAuthGmailCallback() {
   const { toast } = useToast();
   const [, navigate] = useLocation(); // Navigate function from Wouter
 
@@ -11,23 +11,24 @@ export default function OAuthCallback() {
     // Read query parameters from the full browser URL
     const queryString = window.location.search;
     const url = new URLSearchParams(queryString);
+    const regEmail = url.get("regemail");
     const userId = url.get("userid");
     const success = url.get("success");
 
-    console.log("OAuth Redirect Params ->", { userId, success });
-
-    if (success === "true" && userId) {
-      localStorage.setItem("userId", userId);
-      sessionStorage.setItem("userId", userId);
-      console.log("Stored userId in localStorage and sessionStorage");
-      navigate("/dashboard");
+    if (success === "true" && regEmail && userId) {
+      localStorage.setItem("regEmail", regEmail);
+      sessionStorage.setItem("regEmail", regEmail);
+      localStorage.setItem("regUserId", userId);
+      sessionStorage.setItem("regUserId", userId);
+      console.log("Stored regEmail in localStorage and sessionStorage");
+      navigate("/email");
     } else {
       toast({
-        title: "Login failed",
-        description: "Google OAuth login was not successful.",
+        title: "Gmail Authorization failed",
+        description: "Gmail OAuth was not successful.",
         variant: "destructive",
       });
-      navigate("/");
+      navigate("/dashboard");
     }
   }, [navigate]);
 
