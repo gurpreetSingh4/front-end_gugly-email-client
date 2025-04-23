@@ -16,6 +16,7 @@ import {
   User,
   LogOut,
   SunMoon,
+  Bot,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -28,10 +29,11 @@ import {
 import { Input } from "../components/ui/input";
 import { Separator } from "../components/ui/separator";
 import { RegisteredEmails } from "../components/RegisteredEmails";
+import { EmailStatistics } from "../components/EmailStatistics";
 
 export default function Dashboard() {
   const { user, logoutMutation } = useAuth();
-  console.log("pta cle ga user h bhi kyanehi",user)
+  console.log("pta cle ga user h bhi kyanehi", user);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -41,6 +43,17 @@ export default function Dashboard() {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const handleOauthGmailClick = async (userid: string) => {
+    console.log("usereid aayer h", userid);
+    try {
+      window.location.href = `${
+        import.meta.env.VITE_EMAIL_SERVICE_URL
+      }/api/email/google?userId=${userid}`;
+    } catch (error) {
+      console.error("Error initiating OAuth Gmail:", error);
+    }
   };
 
   return (
@@ -62,13 +75,16 @@ export default function Dashboard() {
           )}
         </div>
 
-        <Button onClick={() => {}} className="mx-4 my-4">
+        <Button
+          onClick={() => handleOauthGmailClick(String(user?.id))}
+          className="mx-4 my-4"
+        >
           <Plus className="h-4 w-4 mr-2" />
-          {sidebarOpen ? "Compose" : ""}
+          {sidebarOpen ? "Connect Email" : ""}
         </Button>
 
         <nav className="flex-1 p-4 space-y-2">
-          <Button
+          {/* <Button
             variant="ghost"
             className={`w-full justify-start ${
               !sidebarOpen && "justify-center px-0"
@@ -112,7 +128,20 @@ export default function Dashboard() {
           >
             <Trash2 className="h-5 w-5 mr-3" />
             {sidebarOpen && <span>Trash</span>}
-          </Button>
+            </Button> */}
+          <div className="flex items-center space-x-2">
+            <Mail className="h-5 w-5" />
+            <Bot className="h-5 w-5" />
+          </div>
+
+          {sidebarOpen && (
+            <h2 className="text-xl font-bold mb-4">Your Connected Emails</h2>
+          )}
+
+          {/* <h2 className="text-xl font-bold mb-4">Your Connected Emails</h2> */}
+          <div className="space-y-4">
+            {user && <RegisteredEmails userId={String(user.id)} />}
+          </div>
         </nav>
 
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
@@ -291,7 +320,7 @@ export default function Dashboard() {
         {/* Content Area */}
         <main className="flex-1 overflow-y-auto p-4 md:p-6 bg-gray-50 dark:bg-gray-900">
           <div className="flex flex-col space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-2">
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <h2 className="text-xl font-bold mb-4">Welcome to GuglyMail</h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
@@ -302,7 +331,6 @@ export default function Dashboard() {
                   Your Connected Emails
                 </h2>
                 <div className="space-y-4">
-                  
                   {user && <RegisteredEmails userId={String(user.id)} />}
                 </div>
                 {/* <div className="flex gap-3">
@@ -310,6 +338,32 @@ export default function Dashboard() {
                     <Button>Go to Email Dashboard</Button>
                   </a>
                 </div> */}
+              </div>
+
+              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                <h2 className="text-xl font-bold mb-4">Email Analytics</h2>
+                <EmailStatistics 
+                  labels={
+                    // labelsQuery.data ||
+                    [
+                      { id: 'INBOX', name: 'Inbox', type: 'system' },
+                      { id: 'SENT', name: 'Sent', type: 'system' },
+                      { id: 'DRAFT', name: 'Drafts', type: 'system' },
+                      { id: 'TRASH', name: 'Trash', type: 'system' },
+                      { id: 'IMPORTANT', name: 'Important', type: 'system' },
+                      { id: 'SPAM', name: 'Spam', type: 'system' },
+                      { id: 'CATEGORY_PERSONAL', name: 'Personal', type: 'category' },
+                      { id: 'CATEGORY_SOCIAL', name: 'Social', type: 'category' },
+                      { id: 'CATEGORY_PROMOTIONS', name: 'Promotions', type: 'category' }
+                    ]
+                  }
+                  stats={[
+                    { labelId: 'INBOX', name: 'Inbox', total: 150, unread: 45, color: '#0088FE' },
+                    { labelId: 'SENT', name: 'Sent', total: 80, unread: 0, color: '#00C49F' },
+                    { labelId: 'DRAFT', name: 'Draft', total: 20, unread: 20, color: '#FFBB28' },
+                    { labelId: 'TRASH', name: 'Trash', total: 30, unread: 5, color: '#FF8042' }
+                  ]} 
+                />
               </div>
 
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
