@@ -1,8 +1,7 @@
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
-import { ApolloProvider } from "@apollo/client";
-import { client } from "./lib/apollo-client.ts";
+import { ApolloClientProvider } from "./lib/ApolloClientProvider.tsx";
 
 // Apply custom CSS for gradient text
 const style = document.createElement('style');
@@ -26,7 +25,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 createRoot(document.getElementById("root")!).render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>
+  <ApolloClientProvider>
+  <App />
+</ApolloClientProvider>
 );

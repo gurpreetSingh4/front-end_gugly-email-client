@@ -6,7 +6,6 @@ import { TooltipProvider } from "./components/ui/tooltip";
 import { Toaster } from "./components/ui/toaster";
 import { ThemeProvider } from "./lib/theme-provider";
 import { queryClient } from "./lib/queryClient";
-import { client } from "./lib/apollo-client";
 import EmailClient from "./page/EmailClient";
 import NotFound from "./page/not-found";
 import Home from "./page/Home";
@@ -139,7 +138,7 @@ function App() {
   }
 
   return (
-    <ApolloProvider client={client}>
+  
       <ThemeProvider defaultTheme="system" storageKey="email-client-theme">
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
@@ -150,7 +149,7 @@ function App() {
           </AuthProvider>
         </QueryClientProvider>
       </ThemeProvider>
-    </ApolloProvider>
+  
   );
 }
 
