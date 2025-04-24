@@ -18,6 +18,8 @@ import {
   SunMoon,
   Bot,
 } from "lucide-react";
+import { useQuery } from "@apollo/client";
+import { GET_EMAIL_LABEL_STATS } from "../graphql/queries_new";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -36,6 +38,20 @@ export default function Dashboard() {
   console.log("pta cle ga user h bhi kyanehi", user);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [selectedEmail, setSelectedEmail] = useState(
+    () => sessionStorage.getItem("regEmail") || ""
+  );
+
+  const { data, loading, error, refetch } = useQuery(GET_EMAIL_LABEL_STATS, {
+    skip: refreshTrigger === 0, // skip initially
+  });
+
+  const handleRefreshStats = () => {
+    setRefreshTrigger((prev) => prev + 1);
+    refetch(); // fetch fresh data
+    setSelectedEmail(sessionStorage.getItem("regEmail") || "");
+  };
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -55,6 +71,13 @@ export default function Dashboard() {
       console.error("Error initiating OAuth Gmail:", error);
     }
   };
+
+  // const { data, loading, error } = useQuery(GET_EMAIL_LABEL_STATS);
+
+  console.log("apna label ka data", data);
+  const labels = data?.getEmailLabelStats?.labels || [];
+  const stats = data?.getEmailLabelStats?.stats || [];
+  console.log(error);
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
@@ -331,7 +354,12 @@ export default function Dashboard() {
                   Your Connected Emails
                 </h2>
                 <div className="space-y-4">
-                  {user && <RegisteredEmails userId={String(user.id)} />}
+                  {user && (
+                    <RegisteredEmails
+                      userId={String(user.id)}
+                      onEmailSelect={handleRefreshStats}
+                    />
+                  )}
                 </div>
                 {/* <div className="flex gap-3">
                   <a href="/email">
@@ -341,28 +369,40 @@ export default function Dashboard() {
               </div>
 
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <h2 className="text-xl font-bold mb-4">Email Analytics</h2>
-                <EmailStatistics 
+                <h2 className="text-xl font-bold mb-4">
+                  Email Analytics
+                  {selectedEmail && (
+                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
+                      ({selectedEmail})
+                    </span>
+                  )}
+                </h2>
+
+                <EmailStatistics
                   labels={
-                    // labelsQuery.data ||
-                    [
-                      { id: 'INBOX', name: 'Inbox', type: 'system' },
-                      { id: 'SENT', name: 'Sent', type: 'system' },
-                      { id: 'DRAFT', name: 'Drafts', type: 'system' },
-                      { id: 'TRASH', name: 'Trash', type: 'system' },
-                      { id: 'IMPORTANT', name: 'Important', type: 'system' },
-                      { id: 'SPAM', name: 'Spam', type: 'system' },
-                      { id: 'CATEGORY_PERSONAL', name: 'Personal', type: 'category' },
-                      { id: 'CATEGORY_SOCIAL', name: 'Social', type: 'category' },
-                      { id: 'CATEGORY_PROMOTIONS', name: 'Promotions', type: 'category' }
-                    ]
+                    labels
+                    // // labelsQuery.data ||
+                    // [
+                    //   { id: 'INBOX', name: 'Inbox', type: 'system' },
+                    //   { id: 'SENT', name: 'Sent', type: 'system' },
+                    //   { id: 'DRAFT', name: 'Drafts', type: 'system' },
+                    //   { id: 'TRASH', name: 'Trash', type: 'system' },
+                    //   { id: 'IMPORTANT', name: 'Important', type: 'system' },
+                    //   { id: 'SPAM', name: 'Spam', type: 'system' },
+                    //   { id: 'CATEGORY_PERSONAL', name: 'Personal', type: 'category' },
+                    //   { id: 'CATEGORY_SOCIAL', name: 'Social', type: 'category' },
+                    //   { id: 'CATEGORY_PROMOTIONS', name: 'Promotions', type: 'category' }
+                    // ]
                   }
-                  stats={[
-                    { labelId: 'INBOX', name: 'Inbox', total: 150, unread: 45, color: '#0088FE' },
-                    { labelId: 'SENT', name: 'Sent', total: 80, unread: 0, color: '#00C49F' },
-                    { labelId: 'DRAFT', name: 'Draft', total: 20, unread: 20, color: '#FFBB28' },
-                    { labelId: 'TRASH', name: 'Trash', total: 30, unread: 5, color: '#FF8042' }
-                  ]} 
+                  stats={
+                    stats
+                    //   [
+                    //   { labelId: 'INBOX', name: 'Inbox', total: 150, unread: 45, color: '#0088FE' },
+                    //   { labelId: 'SENT', name: 'Sent', total: 80, unread: 0, color: '#00C49F' },
+                    //   { labelId: 'DRAFT', name: 'Draft', total: 20, unread: 20, color: '#FFBB28' },
+                    //   { labelId: 'TRASH', name: 'Trash', total: 30, unread: 5, color: '#FF8042' }
+                    // ]
+                  }
                 />
               </div>
 

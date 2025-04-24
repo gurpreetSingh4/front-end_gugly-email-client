@@ -3,7 +3,6 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import { useToast } from "../hooks/use-toast";
 import { MinusCircle } from "lucide-react"; // optional, use any icon set you're using
-import { useApolloClientManager } from "../lib/ApolloClientProvider";
 
 interface RegisteredEmail {
   email: string;
@@ -11,14 +10,17 @@ interface RegisteredEmail {
   profilePic?: string;
 }
 
-export function RegisteredEmails({ userId }: { userId: string }) {
+export function RegisteredEmails({
+  userId,
+  onEmailSelect,
+}: {
+  userId: string;
+  onEmailSelect?: () => void;
+}) {
   const [emails, setEmails] = useState<RegisteredEmail[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { toast } = useToast();
-
-  const {reloadClient} = useApolloClientManager()
-
 
   useEffect(() => {
     fetchRegisteredEmails();
@@ -27,15 +29,19 @@ export function RegisteredEmails({ userId }: { userId: string }) {
   const fetchRegisteredEmails = async () => {
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/userregemails?userid=${userId}`
+        `${
+          import.meta.env.VITE_AUTH_SERVICE_URL
+        }/api/auth/userregemails?userid=${userId}`
       );
-      if (!response || !response.data) throw new Error("Failed to fetch emails");
-  
+      if (!response || !response.data)
+        throw new Error("Failed to fetch emails");
+
       const normalizedEmails = (response.data.data || []).map((email: any) => ({
         ...email,
-        profilePic: email.profilePic || email.picture || "/fallback-profile.png",
+        profilePic:
+          email.profilePic || email.picture || "/fallback-profile.png",
       }));
-  
+
       setEmails(normalizedEmails);
     } catch (error) {
       console.error("Error fetching registered emails:", error);
@@ -64,7 +70,7 @@ export function RegisteredEmails({ userId }: { userId: string }) {
         sessionStorage.setItem("regEmail", email);
         localStorage.setItem("regUserId", userId);
         sessionStorage.setItem("regUserId", userId);
-        reloadClient()
+        onEmailSelect?.();
         toast({
           title: "Access Token Refresh",
           description: `${response.data.message}`,
