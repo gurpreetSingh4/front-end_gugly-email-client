@@ -50,7 +50,7 @@ export default function Dashboard() {
     try {
       window.location.href = `${
         import.meta.env.VITE_EMAIL_SERVICE_URL
-      }/api/email/google?userId=${userid}`;
+      }/api/email/google?userid=${userid}`;
     } catch (error) {
       console.error("Error initiating OAuth Gmail:", error);
     }

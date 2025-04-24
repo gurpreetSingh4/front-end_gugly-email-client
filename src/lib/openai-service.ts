@@ -20,19 +20,22 @@ export async function generateEmailContent(
           role: "system",
           content: `You are an intelligent email assistant that helps users write clear, concise emails. 
             Generate an email with a ${tone} tone. The email should be appropriately formatted with greeting, 
-            body, and sign-off. Keep the email concise and to the point.`
+            body, and sign-off. Keep the email concise and to the point.`,
         },
         {
           role: "user",
           content: `Write an email with the subject: "${subject}". ${
             context ? `Context: ${context}` : ""
-          }`
-        }
+          }`,
+        },
       ],
       max_tokens: 500,
     });
 
-    return response.choices[0].message.content || "Sorry, I couldn't generate content for this email.";
+    return (
+      response.choices[0].message.content ||
+      "Sorry, I couldn't generate content for this email."
+    );
   } catch (error) {
     console.error("Error generating email content:", error);
     throw new Error("Failed to generate email content. Please try again.");
@@ -52,19 +55,21 @@ export async function generateReplySuggestions(
           role: "system",
           content: `You are an intelligent email assistant. Generate 3 concise reply suggestions for the email below.
             Each suggestion should be different in tone (professional, friendly, brief) and no longer than 1 sentence each.
-            Return only the 3 suggestions as separate sentences.`
+            Return only the 3 suggestions as separate sentences.`,
         },
         {
           role: "user",
-          content: `The email is from ${senderName || "someone"} and contains: "${emailBody}"`
-        }
+          content: `The email is from ${
+            senderName || "someone"
+          } and contains: "${emailBody}"`,
+        },
       ],
       max_tokens: 250,
       response_format: { type: "json_object" },
     });
 
     let suggestions: string[] = [];
-    
+
     try {
       const content = response.choices[0].message.content;
       if (content) {
@@ -101,6 +106,8 @@ export async function completeEmailText(
   currentText: string,
   subject: string = ""
 ): Promise<string> {
+  console.log("contnetttt", subject, "gugu", currentText, "ihiji");
+
   if (!currentText.trim()) return "";
 
   try {
@@ -111,12 +118,12 @@ export async function completeEmailText(
           role: "system",
           content: `You are an intelligent email writing assistant. Complete the user's email text 
             in a natural way, maintaining their style and tone. Only provide the completion text, 
-            not the full email.`
+            not the full email.`,
         },
         {
           role: "user",
-          content: `Subject: ${subject}\n\nEmail text so far: "${currentText}"\n\nComplete this text naturally:`
-        }
+          content: `Subject: ${subject}\n\nEmail text so far: "${currentText}"\n\nComplete this text naturally:`,
+        },
       ],
       max_tokens: 150,
     });
@@ -139,12 +146,12 @@ export async function summarizeEmailThread(
         {
           role: "system",
           content: `You are an email assistant that summarizes email threads concisely. 
-            Create a brief summary (3-5 bullet points) of the key points discussed in the thread.`
+            Create a brief summary (3-5 bullet points) of the key points discussed in the thread.`,
         },
         {
           role: "user",
-          content: `Summarize this email thread:\n\n${emailThread}`
-        }
+          content: `Summarize this email thread:\n\n${emailThread}`,
+        },
       ],
       max_tokens: 300,
     });
@@ -168,12 +175,12 @@ export async function analyzeEmailSentiment(
           role: "system",
           content: `You are an email sentiment analyzer. Analyze the sentiment of the following email 
             and provide a simple assessment (positive, neutral, negative) and brief suggestions for response 
-            if the sentiment is negative.`
+            if the sentiment is negative.`,
         },
         {
           role: "user",
-          content: `Analyze the sentiment of this email:\n\n${emailBody}`
-        }
+          content: `Analyze the sentiment of this email:\n\n${emailBody}`,
+        },
       ],
       max_tokens: 200,
       response_format: { type: "json_object" },
@@ -196,5 +203,45 @@ export async function analyzeEmailSentiment(
   } catch (error) {
     console.error("Error analyzing email sentiment:", error);
     return { sentiment: "neutral", suggestions: null };
+  }
+}
+
+// Function to generate 3 short suggestions to complete the next sentence
+export async function generateNextSentenceSuggestions(
+  textBeforeCursor: string,
+  subject: string
+): Promise<string[]> {
+  try {
+    const response = await openai.chat.completions.create({
+      model: OPENAI_MODEL,
+      messages: [
+        {
+          role: "system",
+          content: `You are a helpful email assistant. 
+                    Given the subject and email text so far, generate exactly 3 suggestions to naturally complete the next sentence. 
+                    Each suggestion must be 4 to 6 words long. 
+                    Output the suggestions as a plain list, one per line.`,
+        },
+        {
+          role: "user",
+          content: `Subject: ${subject}\n\nText so far: "${textBeforeCursor}"\n\nComplete the next sentence with exactly 3 natural options:`,
+        },
+      ],
+      max_tokens: 100,
+    });
+
+    const raw = response.choices[0].message.content || "";
+    const suggestions = raw
+      .split(/\n|•|–|-|\*/g)
+      .map((s) => s.trim().replace(/^[\d\.\-\*]+\s*/, "")) // Remove bullets or numbers
+      .filter((s) => {
+        const wordCount = s.split(" ").length;
+        return s && wordCount >= 4 && wordCount <= 6;
+      });
+
+    return suggestions.slice(0, 3);
+  } catch (error) {
+    console.error("Error generating next sentence suggestions:", error);
+    return [];
   }
 }

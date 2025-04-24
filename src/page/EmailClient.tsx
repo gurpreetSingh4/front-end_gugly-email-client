@@ -207,7 +207,7 @@ export default function EmailClient() {
       } else if (selectedEmail) {
         clearSelectedEmail();
       }
-    }},
+    }}, 
     { key: '/', description: 'Focus search box', action: () => {
       const searchInput = document.querySelector('input[type="search"]');
       if (searchInput) {

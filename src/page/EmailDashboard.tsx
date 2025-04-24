@@ -74,7 +74,7 @@ const GmailConnect = ({ onSuccess }: { onSuccess: () => void }) => {
   const connectGmail = async () => {
     try {
       setIsConnecting(true);
-      const response = await apiRequest('GET', `/api/email/google?userId=${user?.id}&regEmail=${user?.email}`);
+      const response = await apiRequest('GET', `/api/email/google?userid=${user?.id}&regemail=${user?.email}`);
       if (response.ok) {
         // The response might be a redirect URL to Google OAuth
         const data = await response.json();
