@@ -144,25 +144,26 @@ export function RegisteredEmails({
               )}
               {sidebarOpen && (
                 <div className="flex flex-col min-w-0">
-                  <p className="font-medium truncate">{email.name}</p>
-                  <p className="text-sm text-gray-500 truncate">
-                    {email.email}
-                  </p>
+                  <div>
+                    <p className="font-medium truncate">{email.name}</p>
+                    <p className="text-sm text-gray-500 truncate">
+                      {email.email}
+                    </p>
+                  </div>
+                  {/* Remove button (hover icon) */}
+                  <button
+                    className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                    onClick={(e) => {
+                      e.stopPropagation(); // prevent triggering parent click
+                      handleRemoveEmail(email.email);
+                    }}
+                    title="Remove this registered email"
+                  >
+                    <MinusCircle className="h-5 w-5 text-red-500 hover:text-red-700" />
+                  </button>
                 </div>
               )}
             </Button>
-
-            {/* Remove button (hover icon) */}
-            <button
-              className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-              onClick={(e) => {
-                e.stopPropagation(); // prevent triggering parent click
-                handleRemoveEmail(email.email);
-              }}
-              title="Remove this registered email"
-            >
-              <MinusCircle className="h-5 w-5 text-red-500 hover:text-red-600" />
-            </button>
           </div>
         ))
       )}
