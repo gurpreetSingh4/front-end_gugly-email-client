@@ -90,8 +90,31 @@ export function EmailStatistics({ labels, stats }: { labels: any[], stats: Email
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500">
-              Click on a label in the left chart to view details
+            <div className="flex flex-col items-center justify-center h-full space-y-4">
+              <div className="relative w-32 h-32">
+                <div className="absolute animate-bounce">
+                  <svg viewBox="0 0 200 200" className="w-32 h-32">
+                    {/* Robot Head */}
+                    <rect x="60" y="60" width="80" height="80" rx="10" fill="#4F46E5" className="animate-pulse" />
+                    {/* Eyes */}
+                    <circle cx="85" cy="90" r="8" fill="#fff" />
+                    <circle cx="115" cy="90" r="8" fill="#fff" />
+                    {/* Antenna */}
+                    <line x1="100" y1="50" x2="100" y2="30" stroke="#4F46E5" strokeWidth="4" />
+                    <circle cx="100" cy="25" r="5" fill="#4F46E5" className="animate-ping" />
+                    {/* Thinking Bubbles */}
+                    <circle cx="140" cy="50" r="5" fill="#4F46E5" className="animate-pulse" />
+                    <circle cx="155" cy="40" r="4" fill="#4F46E5" className="animate-pulse" />
+                    <circle cx="165" cy="25" r="3" fill="#4F46E5" className="animate-pulse" />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-gray-500 text-sm animate-pulse">
+                Processing email analytics...
+              </p>
+              <p className="text-gray-400 text-xs">
+                Select a label to view detailed statistics
+              </p>
             </div>
           )}
         </div>
