@@ -37,7 +37,9 @@ export function EmailList({
   };
 
   const formatEmailDate = (dateString: string) => {
+    if (!dateString) return ''; // If no date provided, return empty
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return ''; // If invalid date, return empty
     const now = new Date();
     const isToday = date.getDate() === now.getDate() &&
                    date.getMonth() === now.getMonth() &&

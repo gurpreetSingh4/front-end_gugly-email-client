@@ -24,7 +24,7 @@ export default function OAuthGmailCallback() {
 
 
       console.log("Stored regEmail in localStorage and sessionStorage");
-      navigate("/email");
+      navigate("/dashboard");
     } else {
       toast({
         title: "Gmail Authorization failed",

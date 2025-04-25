@@ -2,13 +2,17 @@ import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import axios from "axios";
 import { useToast } from "../hooks/use-toast";
-import { MinusCircle } from "lucide-react"; // optional, use any icon set you're using
+import { Bot, MinusCircle } from "lucide-react"; // optional, use any icon set you're using
+import { useLocation } from "wouter"; // Correct import
+
+
 
 interface RegisteredEmail {
   email: string;
   name: string;
   profilePic?: string;
 }
+// const navigate = useNavigate();
 
 export function RegisteredEmails({
   userId,
@@ -21,6 +25,8 @@ export function RegisteredEmails({
   const [loading, setLoading] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { toast } = useToast();
+const [, navigate] = useLocation();
+
 
   useEffect(() => {
     fetchRegisteredEmails();
@@ -50,12 +56,12 @@ export function RegisteredEmails({
     }
   };
 
-  const handleEmailClick = async (email: string) => {
+  const handleEmailClick = async (email: string, name: string) => {
     try {
       const response = await axios.get(
         `${
           import.meta.env.VITE_EMAIL_SERVICE_URL
-        }/api/email/refreshaccesstoken?userid=${userId}&regemail=${email}`
+        }/api/email/refreshaccesstoken?userid=${userId}&regemail=${email}&regname=${name}`
       );
       if (!response || !response.data) {
         toast({
@@ -124,46 +130,66 @@ export function RegisteredEmails({
       ) : (
         emails.map((email) => (
           <div key={email.email} className="relative group">
-            <Button
-              variant="ghost"
-              className={`w-full flex items-center gap-2 overflow-hidden pr-10 ${
-                !sidebarOpen ? "justify-center px-0" : "justify-start px-2"
-              }`}
-              onClick={() => handleEmailClick(email.email)}
-            >
-              {email.profilePic ? (
-                <img
-                  src={email.profilePic}
-                  alt={email.name}
-                  className="h-8 w-8 rounded-full object-cover shrink-0"
-                />
-              ) : (
-                <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-white shrink-0">
-                  ?
-                </div>
-              )}
-              {sidebarOpen && (
-                <div className="flex flex-col min-w-0">
-                  <div>
+            {/* Hover Target Group Wrapper */}
+            <div className="relative group w-full">
+              <Button
+                variant="ghost"
+                className={`w-full flex items-center gap-2 overflow-hidden pr-10 ${
+                  !sidebarOpen ? "justify-center px-0" : "justify-start px-2"
+                }`}
+                onClick={() => handleEmailClick(email.email, email.name)}
+              >
+                {email.profilePic ? (
+                  <img
+                    src={email.profilePic}
+                    alt={email.name}
+                    className="h-8 w-8 rounded-full object-cover shrink-0"
+                  />
+                ) : (
+                  <div className="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-white shrink-0">
+                    ?
+                  </div>
+                )}
+                {sidebarOpen && (
+                  <div className="flex flex-col min-w-0">
                     <p className="font-medium truncate">{email.name}</p>
                     <p className="text-sm text-gray-500 truncate">
                       {email.email}
                     </p>
                   </div>
-                  {/* Remove button (hover icon) */}
-                  <button
-                    className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                    onClick={(e) => {
-                      e.stopPropagation(); // prevent triggering parent click
-                      handleRemoveEmail(email.email);
-                    }}
-                    title="Remove this registered email"
-                  >
-                    <MinusCircle className="h-5 w-5 text-red-500 hover:text-red-700" />
-                  </button>
-                </div>
-              )}
-            </Button>
+                )}
+              </Button>
+              <button
+                className="absolute right-10 top-1/2 -translate-y-1/2 opacity-0 scale-75
+                          group-hover:opacity-100 group-hover:scale-100
+                          pointer-events-none group-hover:pointer-events-auto
+                          transition-all duration-300 hover:bg-blue-100 active:bg-red-300 rounded-full p-1"
+                style={{ transitionDelay: "1.0s" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate('/emailclient');
+                }}
+                title="Open Email Client"
+              >
+                <Bot className="h-5 w-5 text-blue-500 hover:text-blue-700 active:text-red-600 transition-all duration-300" />
+              </button>
+
+              {/* Zoom-in Remove Button */}
+              <button
+                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 scale-75 
+                         group-hover:opacity-100 group-hover:scale-100 
+                         pointer-events-none group-hover:pointer-events-auto 
+                         transition-all duration-300"
+                style={{ transitionDelay: "1.4s" }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveEmail(email.email);
+                }}
+                title="Remove this registered email"
+              >
+                <MinusCircle className="h-5 w-5 text-red-500 hover:text-red-700 group-hover:brightness-125 transition-all duration-300" />
+              </button>
+            </div>
           </div>
         ))
       )}

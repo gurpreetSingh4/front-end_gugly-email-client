@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { ApolloProvider } from "@apollo/client";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Switch, Route } from "wouter";

@@ -99,7 +99,7 @@ export function EmailDetail({
               <DropdownMenuLabel>Apply Label</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {labels.map((label) => {
-                const hasLabel = email.labelIds.includes(label.id);
+               const hasLabel = Array.isArray(email.labelIds) && email.labelIds.includes(label.id);
                 return (
                   <DropdownMenuItem
                     key={label.id}
@@ -129,8 +129,8 @@ export function EmailDetail({
         <div className="flex items-start mb-6">
           <div 
             className="w-10 h-10 rounded-full text-white flex items-center justify-center flex-shrink-0"
-            style={{ backgroundColor: email.sender.avatar ? 'transparent' : email.labelIds.length > 0 ? email.labels[0].color : '#3b82f6' }}
-          >
+            style={{ backgroundColor: email.sender.avatar ? 'transparent' : (email.labelIds?.length > 0 && email.labels?.[0]?.color) || '#3b82f6' }}
+            >
             {email.sender.avatar ? (
               <img 
                 src={email.sender.avatar} 
