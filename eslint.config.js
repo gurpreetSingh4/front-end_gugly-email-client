@@ -33,7 +33,11 @@ export default tseslint.config(
       ...react.configs.recommended.rules,
 
       // You can turn off rules you don't want here
-      'react/react-in-jsx-scope': 'off', // for React 17+
+      'react/react-in-jsx-scope': 'off', // React 17+ doesn't need import React
+
+      // Ignore unused variables if they start with underscore (_)
+      'no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
+      '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_' }],
     },
   }
 )

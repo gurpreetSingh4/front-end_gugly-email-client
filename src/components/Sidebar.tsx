@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { 
   Inbox, Star, Clock, Send, FileText, AlertTriangle, 
-  Trash, Plus, ChevronDown, Edit, Tag, X 
+  Trash, Plus, Edit, X 
 } from 'lucide-react';
 import { Label } from '../graphql/schema';
 import { CreateLabelModal } from './CreateLabelModal';

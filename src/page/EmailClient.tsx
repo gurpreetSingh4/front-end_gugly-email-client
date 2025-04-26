@@ -10,13 +10,6 @@ import { useEmailClient } from "../hooks/useEmailClient";
 import { useToast } from "../hooks/use-toast";
 import { Sparkles, Search, ArrowRight } from "lucide-react";
 
-// Interface for vector search filters
-interface SearchFilters {
-  folder?: string;
-  dateRange?: "today" | "week" | "month" | "year" | "all";
-  hasAttachments?: boolean;
-  labelIds?: number[];
-}
 
 export default function EmailClient() {
   const { toast } = useToast();
@@ -134,7 +127,7 @@ export default function EmailClient() {
   const handleEnhancedSearch = (
     query: string,
     useAI: boolean,
-    filters: SearchFilters
+    // filters: SearchFilters
   ) => {
     setIsVectorSearching(true);
     setSearchMode(useAI ? "ai" : "vector");
@@ -225,7 +218,7 @@ export default function EmailClient() {
     // Account switching shortcuts (if multiple users exist)
     ...(allUsers && allUsers.length > 1
       ? // Generate shortcuts for up to 5 users using number keys 1-5
-        allUsers.slice(0, 5).map((user, index) => ({
+        allUsers.slice(0, 5).map((user: { name: any; id: number; }, index: number) => ({
           key: `${index + 1}`,
           description: `Switch to ${user.name}`,
           action: () => handleSwitchUser(user.id),
@@ -276,7 +269,7 @@ export default function EmailClient() {
           selectedLabelId={selectedLabelId}
           draftCount={draftCount}
           unreadCount={unreadCount}
-          onCreateLabel={handleCreateLabel}
+          onCreateLabel={(label) => handleCreateLabel(label.name)}
           onDeleteLabel={handleDeleteLabel}
           onSelectLabel={handleSelectLabel}
           onSelectFolder={(folder) => {

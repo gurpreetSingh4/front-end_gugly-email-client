@@ -16,7 +16,6 @@ import OAuthGmailCallback from "./page/OAuthGmailCallback";
 
 const AuthPage = lazy(() => import("./page/auth-page"));
 const DashboardPage = lazy(() => import("./page/dashboard_new"));
-const EmailDashboardPage = lazy(() => import("./page/EmailDashboard"));
 
 const Auth = () => (
   <Suspense
@@ -42,17 +41,6 @@ const Dashboard = () => (
   </Suspense>
 );
 
-const EmailDashboard = () => (
-  <Suspense
-    fallback={
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    }
-  >
-    <EmailDashboardPage />
-  </Suspense>
-);
 
 // Protected route component
 const ProtectedRoute = ({
@@ -108,11 +96,11 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/auth" component={Auth} />
-      <Route path="/emailclient" component={EmailClient} />
       <Route path="/oauth/callback" component={OAuthCallback} />
       <Route path="/oauthgmail/callback" component={OAuthGmailCallback} />
       <ProtectedRoute path="/dashboard" component={Dashboard} />
-      <ProtectedRoute path="/email" component={EmailDashboard} />
+      <ProtectedRoute path="/emailclient" component={EmailClient} />
+      
       <Route component={NotFound} />
     </Switch>
   );

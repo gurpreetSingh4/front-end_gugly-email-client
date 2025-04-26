@@ -10,7 +10,7 @@ import {
   useMutation,
   UseMutationResult,
 } from "@tanstack/react-query";
-import { apiRequestAxios, queryClient } from "../lib/queryClient";
+import {  queryClient } from "../lib/queryClient";
 import { useToast } from "./use-toast";
 import axios from "axios";
 

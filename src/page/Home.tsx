@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useLocation } from "wouter";
 import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
@@ -14,7 +13,7 @@ const Home = () => {
   const { user } = useAuth();
   // const user = false;
 
-  const goToAuth = (tab: "login" | "register" = "login") => {
+  const goToAuth = (_tab: "login" | "register" = "login") => {
     if (user) {
       navigate("/dashboard");
     } else {

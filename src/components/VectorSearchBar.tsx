@@ -4,17 +4,7 @@ import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { 
   Search, Sparkles, X, Loader2, 
-  SlidersHorizontal, ChevronDown 
-} from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../components/ui/dropdown-menu";
+  SlidersHorizontal} from 'lucide-react';
 import {
   Select,
   SelectContent,

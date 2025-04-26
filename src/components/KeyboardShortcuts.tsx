@@ -5,7 +5,6 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "../components/ui/sheet";
 import { KeyboardIcon } from "lucide-react";
 import { Button } from "../components/ui/button";

@@ -23,7 +23,7 @@ export function RegisteredEmails({
 }) {
   const [emails, setEmails] = useState<RegisteredEmail[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const sidebarOpen = true
   const { toast } = useToast();
 const [, navigate] = useLocation();
 

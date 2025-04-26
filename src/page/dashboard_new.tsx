@@ -43,7 +43,7 @@ export default function Dashboard() {
     () => sessionStorage.getItem("regEmail") || ""
   );
 
-  const { data, loading, error, refetch } = useQuery(GET_EMAIL_LABEL_STATS, {
+  const { data, error, refetch } = useQuery(GET_EMAIL_LABEL_STATS, {
     skip: refreshTrigger === 0, // skip initially
   });
 

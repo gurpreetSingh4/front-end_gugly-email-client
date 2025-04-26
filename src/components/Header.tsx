@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '../components/ui/button';
 import { 
   Mail, Search, HelpCircle, Settings, 
-  Menu, Sparkles, X, ChevronDown
+  Menu, ChevronDown
 } from 'lucide-react';
 import { useMediaQuery } from '../hooks/use-mobile';
 import { VectorSearchBar } from './VectorSearchBar';
@@ -18,7 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import { Avatar, AvatarFallback } from "../components/ui/avatar";
 
 interface User {
   id: number;

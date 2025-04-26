@@ -4,7 +4,6 @@ import {
   Reply, Forward, Download, MoreVertical, Tag
 } from 'lucide-react';
 import { Email, Label } from '../graphql/schema';
-import { useState } from 'react';
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../components/ui/dropdown-menu';
-import { formatDistanceToNow, format } from 'date-fns';
+import { format } from 'date-fns';
 
 interface EmailDetailProps {
   email: Email;

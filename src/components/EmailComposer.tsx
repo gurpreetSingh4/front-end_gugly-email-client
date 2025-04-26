@@ -18,7 +18,7 @@ interface EmailComposerProps {
   onSend: () => Promise<void>;
 }
 
-export function EmailComposer({ draft, onClose, onSave, onSend }: EmailComposerProps) {
+export function EmailComposer({ draft, onClose }: EmailComposerProps) {
   const [recipients, setRecipients] = useState<string>(draft?.recipients?.join(", ") || "");
   const [subject, setSubject] = useState<string>(draft?.subject || "");
   const [body, setBody] = useState<string>(draft?.body || "");
@@ -27,7 +27,7 @@ export function EmailComposer({ draft, onClose, onSave, onSend }: EmailComposerP
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [aiGenerating, setAiGenerating] = useState(false);
   const [iconPos, setIconPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
-  const [showAiIcon, setShowAiIcon] = useState(true);
+  const [showAiIcon] = useState(true);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -57,7 +57,6 @@ export function EmailComposer({ draft, onClose, onSave, onSend }: EmailComposerP
 
   const updateCursorPosition = () => {
     if (!textareaRef.current) return;
-    const rect = textareaRef.current.getBoundingClientRect();
     const selectionStart = textareaRef.current.selectionStart;
     const text = textareaRef.current.value.substring(0, selectionStart);
     const lines = text.split("\n");

@@ -23,7 +23,6 @@ interface EmailListProps {
 export function EmailList({ 
   emails, 
   selectedEmailId, 
-  labels,
   loading, 
   error, 
   onRefresh, 

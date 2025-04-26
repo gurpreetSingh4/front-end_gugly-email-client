@@ -7,8 +7,6 @@ import {
   GET_DRAFTS,
   GET_CURRENT_USER,
   GET_ALL_USERS,
-  ENHANCED_SEARCH,
-  SEARCH_EMAILS,
   
 } from '../graphql/queries_new';
 import {
@@ -27,7 +25,7 @@ export function useEmailClient() {
   const [selectedEmailId, setSelectedEmailId] = useState<number | undefined>();
   const [selectedFolder, setSelectedFolder] = useState('inbox');
   const [selectedLabelId, setSelectedLabelId] = useState<number | undefined>();
-  const [searchQuery, setSearchQuery] = useState('');
+  const [_, setSearchQuery] = useState('');
   const [activeDraftId, setActiveDraftId] = useState<number | undefined>();
 
   // Queries
@@ -44,13 +42,13 @@ export function useEmailClient() {
   });
   const {
     data: labelsData,
-    loading: isLoadingLabels,
+    // loading: isLoadingLabels,
     error: labelsError,
     refetch: refetchLabels,
   } = useQuery(GET_LABELS);
   const {
     data: emailDetailData,
-    loading: isLoadingEmailDetail,
+    // loading: isLoadingEmailDetail,
     refetch: refetchEmailDetail,
   } = useQuery(GET_EMAIL_BY_ID, {
     variables: { emailId: selectedEmailId },
@@ -79,14 +77,14 @@ export function useEmailClient() {
 
   // Derived
   const selectedEmail = emailDetailData?.email || null;
-  const activeDraft = draftsData?.drafts?.find((d) => d.id === activeDraftId) || null;
+  const activeDraft = draftsData?.drafts?.find((d: { id: number | undefined; }) => d.id === activeDraftId) || null;
   const emails = emailsData?.emails || [];
   const labels = labelsData?.labels || [];
   const drafts = draftsData?.drafts || [];
   const currentUser = currentUserData?.currentUser || null;
   const allUsers = allUsersData?.users || [];
 
-  const unreadCount = emails.filter((e) => !e.isRead && e.folder === 'inbox').length;
+  const unreadCount = emails.filter((e: { isRead: any; folder: string; }) => !e.isRead && e.folder === 'inbox').length;
   const draftCount = drafts.length;
 
   // Handlers
@@ -155,7 +153,7 @@ export function useEmailClient() {
   };
 
   const handleSendEmail = async () => {
-    const draft = drafts.find((d) => d.id === activeDraftId);
+    const draft = drafts.find((d: { id: number | undefined; }) => d.id === activeDraftId);
     if (!draft) return;
 
     await sendEmailMutation({
