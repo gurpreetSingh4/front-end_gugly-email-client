@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = `${import.meta.env.VITE_EMAIL_SERVICE_URL}/api/email/graphql`;
 
 export async function apiRequest(
   method: string = "GET",
