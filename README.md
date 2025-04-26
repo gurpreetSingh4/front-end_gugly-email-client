@@ -1,54 +1,77 @@
-# React + TypeScript + Vite
+# Gugly Email Client 📩✨
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combining **intuitive UI**, **dynamic search (AI & vector search)**, **email management**, and **label organization** into one modern, fast frontend.Built with **React + Apollo Client** — beautifully deployed at:
 
-Currently, two official plugins are available:
+👉 [Live Demo](https://front-end-monorepo-gugly-email-client.onrender.com/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚀 Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Dynamic Email Management**: Inbox, Sent, Drafts, Spam, Trash
+- **Compose Emails with AI Assistance**  → Press `Ctrl + Space` to trigger suggestions  → Floating AI icon for inline ghost text
+- **Advanced Search**  → Regular search  → AI-Powered Semantic search  → Vector-based search
+- **Label Management**  → Create, Apply, Delete labels easily
+- **Keyboard Shortcuts** (e.g., `C` to Compose, `I` for Inbox, `R` for Reply)
+- **Responsive Design**: Fully optimized for mobile and desktop
+- **Multiple User Switching** (supports multiple accounts)
+- **Attachments Support**
+- **Dark Mode / Light Mode Toggle** 🌗
+- **Loading Skeletons, Toast Notifications, and Error States** for smooth UX
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+## 🛠 Tech Stack
+
+- **Frontend**: React.js, Vite, TailwindCSS
+- **GraphQL Client**: Apollo Client
+- **State Management**: React hooks, Context APIs
+- **Icons**: Lucide React
+- **AI Integration**: OpenAI API for real-time text suggestions
+- **Deployment**: Render.com
+
+---
+
+## 👥 Folder Structure
+
+| File                | Purpose                   |
+| ------------------- | ------------------------- |
+| `EmailClient.tsx`   | Main dashboard controller |
+| `Header.tsx`        | Top header + search bar   |
+| `Sidebar.tsx`       | Navigation sidebar        |
+| `EmailList.tsx`     | Emails list view          |
+| `EmailDetail.tsx`   | Read email with actions   |
+| `EmailComposer.tsx` | Compose and AI suggest    |
+
+---
+
+## 📸 UI Snapshots
+
+| Email List View | Compose with AI | Labels Sidebar | AI Ghost Suggestions |
+| --------------- | --------------- | -------------- | -------------------- |
+|                 |                 |                |                      |
+
+---
+
+## 👨‍💼 Developer
+
+- **Name**: Gurpreet Singh
+- **Email**: [gurpreetsingh.dev0@gmail.com](mailto:gurpreetsingh.dev0@gmail.com)
+- **GitHub**: [@gurpreet-singh-dev](https://github.com/gurpreet-singh-dev)
+- **LinkedIn**: [Gurpreet Singh](https://linkedin.com/in/gurpreet-singh-dev)
+
+---
+
+## 🔗 Important Links
+
+- 🔥 **Live Project**: [https://front-end-monorepo-gugly-email-client.onrender.com/](https://front-end-monorepo-gugly-email-client.onrender.com/)
+- 📂 **GitHub Repo**: *(link to your GitHub repo after uploading)*
+
+---
+
+# Thanks for visiting! ⭐ If you liked it, please give it a star!
+
+---
