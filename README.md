@@ -59,9 +59,9 @@ A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combi
 ## 👨‍💼 Developer
 
 - **Name**: Gurpreet Singh
-- **Email**: [gurpreetsingh.dev0@gmail.com](mailto:gurpreetsingh.dev0@gmail.com)
-- **GitHub**: [@gurpreet-singh-dev](https://github.com/gurpreet-singh-dev)
-- **LinkedIn**: [Gurpreet Singh](https://linkedin.com/in/gurpreet-singh-dev)
+- **Email**: [gurpreetyarasingh@gmail.com](mailto:gurpreetyarasingh@gmail.com)
+- **GitHub**: [@gurpreetSingh4](https://github.com/gurpreetSingh4/)
+- **LinkedIn**: [Gurpreet Singh](https://www.linkedin.com/in/gurpreet-singh-1a3bb4296/)
 
 ---
 
