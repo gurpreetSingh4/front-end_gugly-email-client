@@ -69,6 +69,12 @@ const Hero: React.FC<HeroProps> = ({ onGetStarted }) => {
                 <rect x="80" y="405" width="640" height="10" rx="2" fill="#cbd5e1" />
                 <rect x="80" y="425" width="520" height="10" rx="2" fill="#cbd5e1" />
               </svg>
+              <img 
+  src='https://github.com/gurpreetSingh4/front-end_gugly-email-client/blob/master/public/googly-email-client-pie.png?raw=true'
+  alt="Email client preview"
+  loading="lazy"
+  className="absolute top-0 left-0 w-full h-full object-contain"
+/>
             </div>
           </div>
         </div>
