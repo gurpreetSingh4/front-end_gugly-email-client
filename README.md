@@ -4,8 +4,15 @@ A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combi
 
 👉 [Live Demo](https://front-end-monorepo-gugly-email-client.onrender.com/)
 
+## 🔗 Source code Links
+
+- 🔥 **Front End Monorepo S**: [https://front-end-monorepo-gugly-email-client.onrender.com/](https://front-end-monorepo-gugly-email-client.onrender.com/)
+- 🔥 **AuthService BackEnd**: [https://github.com/gurpreetSingh4/auth-service_gugly-email-client](https://github.com/gurpreetSingh4/auth-service_gugly-email-client)
+- 🔥 **Email Service BackEnd**: [https://github.com/gurpreetSingh4/email-service-nest](https://github.com/gurpreetSingh4/email-service-nest)
 
 
+
+<img src="https://github.com/user-attachments/assets/651f549a-eb2f-4c04-beca-42ced979fd85">
 
 ---
 
@@ -23,6 +30,7 @@ A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combi
 - **Loading Skeletons, Toast Notifications, and Error States** for smooth UX
 
 ---
+<img src="https://github.com/user-attachments/assets/6ec06fbf-cfda-4f7c-b485-74924bca1715">
 
 ## 🛠 Tech Stack
 
@@ -55,7 +63,6 @@ A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combi
 |                 |                 |                |                      |
 
 ---
-
 ## 👨‍💼 Developer
 
 - **Name**: Gurpreet Singh
@@ -68,7 +75,9 @@ A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combi
 ## 🔗 Important Links
 
 - 🔥 **Live Project**: [https://front-end-monorepo-gugly-email-client.onrender.com/](https://front-end-monorepo-gugly-email-client.onrender.com/)
-- 📂 **GitHub Repo**: *(link to your GitHub repo after uploading)*
+- 🔥 **AuthService SourceCode**: [https://github.com/gurpreetSingh4/auth-service_gugly-email-client](https://github.com/gurpreetSingh4/auth-service_gugly-email-client)
+- 🔥 **Email Service SourceCode**: [https://github.com/gurpreetSingh4/email-service-nest](https://github.com/gurpreetSingh4/email-service-nest)
+
 
 ---
 
