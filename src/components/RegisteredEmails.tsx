@@ -63,6 +63,7 @@ const [, navigate] = useLocation();
           import.meta.env.VITE_EMAIL_SERVICE_URL
         }/api/email/refreshaccesstoken?userid=${userId}&regemail=${email}&regname=${name}`
       );
+      console.log("response bhi dekho", response)
       if (!response || !response.data) {
         toast({
           title: "Access Token Refresh failed",
@@ -71,11 +72,11 @@ const [, navigate] = useLocation();
         });
         throw new Error("Failed to fetch emails");
       }
+      localStorage.setItem("regEmail", email);
+      sessionStorage.setItem("regEmail", email);
+      localStorage.setItem("regUserId", userId);
+      sessionStorage.setItem("regUserId", userId);
       if (response.data.success) {
-        localStorage.setItem("regEmail", email);
-        sessionStorage.setItem("regEmail", email);
-        localStorage.setItem("regUserId", userId);
-        sessionStorage.setItem("regUserId", userId);
         onEmailSelect?.();
         toast({
           title: "Access Token Refresh",

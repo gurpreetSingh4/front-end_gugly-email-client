@@ -15,6 +15,7 @@ export default function OAuthGmailCallback() {
     const regEmail = url.get("regemail");
     const userId = url.get("userid");
     const success = url.get("success");
+    console.log("aaya ye sbb",regEmail, userId, success)
 
     if (success === "true" && regEmail && userId) {
       localStorage.setItem("regEmail", regEmail);

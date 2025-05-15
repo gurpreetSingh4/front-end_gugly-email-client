@@ -218,10 +218,10 @@ export default function EmailClient() {
     // Account switching shortcuts (if multiple users exist)
     ...(allUsers && allUsers.length > 1
       ? // Generate shortcuts for up to 5 users using number keys 1-5
-        allUsers.slice(0, 5).map((user: { name: any; id: number; }, index: number) => ({
+        allUsers.slice(0, 5).map((user: { name: any; id: number; email: string }, index: number) => ({
           key: `${index + 1}`,
           description: `Switch to ${user.name}`,
-          action: () => handleSwitchUser(user.id),
+          action: () => handleSwitchUser(user.id, user.email),
         }))
       : []),
 

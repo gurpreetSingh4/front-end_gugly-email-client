@@ -2,7 +2,7 @@ import { QueryClient, QueryFunction } from "@tanstack/react-query";
 import axios from "axios"
 
 const BASE_URL = `${import.meta.env.VITE_EMAIL_SERVICE_URL}/api/email/graphql`
-console.log(BASE_URL)
+console.log(BASE_URL,'kkkk')
 
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {

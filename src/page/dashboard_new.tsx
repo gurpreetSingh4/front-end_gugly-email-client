@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { useAuth } from "../hooks/use-auth";
 import { ThemeToggle } from "../components/ui/theme-toggle";
 import { Button } from "../components/ui/button";
@@ -18,8 +19,6 @@ import {
   SunMoon,
   Bot,
 } from "lucide-react";
-import { useQuery } from "@apollo/client";
-import { GET_EMAIL_LABEL_STATS } from "../graphql/queries_new";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,58 +34,57 @@ import { EmailStatistics } from "../components/EmailStatistics";
 
 export default function Dashboard() {
   const { user, logoutMutation } = useAuth();
-  console.log("pta cle ga user h bhi kyanehi", user);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
-  const [selectedEmail, setSelectedEmail] = useState(
-    () => sessionStorage.getItem("regEmail") || ""
-  );
+  const [selectedEmail, setSelectedEmail] = useState(() => sessionStorage.getItem("regEmail") || "");
+  const [stats, setStats] = useState([]);
+  const [labels, setLabels] = useState([]);
+  
 
-  const { data, error, refetch } = useQuery(GET_EMAIL_LABEL_STATS, {
-    skip: refreshTrigger === 0, // skip initially
-  });
+  const fetchEmailLabelStats = async () => {
+    try {
+      const userid = localStorage.getItem("regUserId");
+      const regemail = sessionStorage.getItem("regEmail")  ;
+      const res = await axios.get(`${import.meta.env.VITE_EMAIL_SERVICE_URL}/api/email/getemaillabelstats`, {
+        params: { userid, regemail },
+      });
+      console.log("data aaya koe", res.data)
+      setLabels(res.data?.labels || []);
+      setStats(res.data?.stats || []);
+    } catch (err) {
+      console.error("Failed to fetch label stats", err);
+    }
+  };
+
+  useEffect(() => {
+    if (refreshTrigger > 0) {
+      fetchEmailLabelStats();
+    }
+  }, [refreshTrigger]);
 
   const handleRefreshStats = () => {
     setRefreshTrigger((prev) => prev + 1);
-    refetch(); // fetch fresh data
+    fetchEmailLabelStats();
     setSelectedEmail(sessionStorage.getItem("regEmail") || "");
+    console.log("ye bhi call hua ha")
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleOauthGmailClick = async (userid: string) => {
-    console.log("usereid aayer h", userid);
+  const handleOauthGmailClick = async (userid: string = '') => {
     try {
-      window.location.href = `${
-        import.meta.env.VITE_EMAIL_SERVICE_URL
-      }/api/email/google?userid=${userid}`;
+      window.location.href = `${import.meta.env.VITE_EMAIL_SERVICE_URL}/api/email/google?userid=${userid}`;
     } catch (error) {
       console.error("Error initiating OAuth Gmail:", error);
     }
   };
 
-  // const { data, loading, error } = useQuery(GET_EMAIL_LABEL_STATS);
-
-  console.log("apna label ka data", data);
-  const labels = data?.getEmailLabelStats?.labels || [];
-  const stats = data?.getEmailLabelStats?.stats || [];
-  console.log(error);
-
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* Sidebar */}
-      <div
-        className={`${
-          sidebarOpen ? "w-64" : "w-20"
-        } hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300`}
-      >
+      <div className={`${sidebarOpen ? "w-64" : "w-20"} hidden md:flex flex-col bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300`}>
         <div className="flex items-center p-4 h-16">
           {sidebarOpen ? (
             <div className="flex items-center space-x-2">
@@ -98,81 +96,24 @@ export default function Dashboard() {
           )}
         </div>
 
-        <Button
-          onClick={() => handleOauthGmailClick(String(user?.id))}
-          className="mx-4 my-4"
-        >
+        <Button onClick={() => handleOauthGmailClick(String(user?.id))} className="mx-4 my-4">
           <Plus className="h-4 w-4 mr-2" />
           {sidebarOpen ? "Connect Email" : ""}
         </Button>
 
         <nav className="flex-1 p-4 space-y-2">
-          {/* <Button
-            variant="ghost"
-            className={`w-full justify-start ${
-              !sidebarOpen && "justify-center px-0"
-            }`}
-          >
-            <Inbox className="h-5 w-5 mr-3" />
-            {sidebarOpen && <span>Inbox</span>}
-          </Button>
-          <Button
-            variant="ghost"
-            className={`w-full justify-start ${
-              !sidebarOpen && "justify-center px-0"
-            }`}
-          >
-            <Star className="h-5 w-5 mr-3" />
-            {sidebarOpen && <span>Starred</span>}
-          </Button>
-          <Button
-            variant="ghost"
-            className={`w-full justify-start ${
-              !sidebarOpen && "justify-center px-0"
-            }`}
-          >
-            <Send className="h-5 w-5 mr-3" />
-            {sidebarOpen && <span>Sent</span>}
-          </Button>
-          <Button
-            variant="ghost"
-            className={`w-full justify-start ${
-              !sidebarOpen && "justify-center px-0"
-            }`}
-          >
-            <File className="h-5 w-5 mr-3" />
-            {sidebarOpen && <span>Drafts</span>}
-          </Button>
-          <Button
-            variant="ghost"
-            className={`w-full justify-start ${
-              !sidebarOpen && "justify-center px-0"
-            }`}
-          >
-            <Trash2 className="h-5 w-5 mr-3" />
-            {sidebarOpen && <span>Trash</span>}
-            </Button> */}
           <div className="flex items-center space-x-2">
             <Mail className="h-5 w-5" />
             <Bot className="h-5 w-5" />
           </div>
-
-          {sidebarOpen && (
-            <h2 className="text-xl font-bold mb-4">Your Connected Emails</h2>
-          )}
-
-          {/* <h2 className="text-xl font-bold mb-4">Your Connected Emails</h2> */}
+          {sidebarOpen && <h2 className="text-xl font-bold mb-4">Your Connected Emails</h2>}
           <div className="space-y-4">
             {user && <RegisteredEmails userId={String(user.id)} />}
           </div>
         </nav>
 
         <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-          <Button
-            variant="ghost"
-            onClick={toggleSidebar}
-            className="w-full justify-start"
-          >
+          <Button variant="ghost" onClick={toggleSidebar} className="w-full justify-start">
             <Menu className="h-5 w-5 mr-3" />
             {sidebarOpen && <span>Collapse</span>}
           </Button>
@@ -181,13 +122,9 @@ export default function Dashboard() {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
         <header className="h-16 flex items-center justify-between px-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
           <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleMobileMenu}
-              className="md:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
-            >
+            <button onClick={toggleMobileMenu} className="md:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
               <Menu className="h-6 w-6" />
             </button>
             <div className="md:hidden flex items-center space-x-2">
@@ -198,11 +135,8 @@ export default function Dashboard() {
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <Search className="h-4 w-4 text-gray-400" />
               </div>
-              <Input
-                type="text"
-                placeholder="Search..."
-                className="pl-10 max-w-[400px] bg-gray-50 dark:bg-gray-700"
-              />
+              <Input type="text" placeholder="Search..." className="pl-10 max-w-[400px
+                ] bg-gray-50 dark:bg-gray-700" />
             </div>
           </div>
 
@@ -210,48 +144,30 @@ export default function Dashboard() {
             <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="relative h-8 w-8 rounded-full"
-                >
+                <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                   <div className="flex h-full w-full items-center justify-center rounded-full bg-slate-400 text-white">
-                    {user?.fullName
-                      ? user.fullName
-                      : user?.fullName?.[0]?.toUpperCase() || "U"}
+                    {user?.fullName ? user.fullName : user?.fullName?.[0]?.toUpperCase() || "U"}
                   </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">
-                      {user?.fullName || "User"}
-                    </p>
-                    <p className="text-xs leading-none text-gray-500 dark:text-gray-400">
-                      {user?.email}
-                    </p>
+                    <p className="text-sm font-medium leading-none">{user?.fullName || "User"}</p>
+                    <p className="text-xs leading-none text-gray-500 dark:text-gray-400">{user?.email}</p>
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
+                <DropdownMenuItem><User className="mr-2 h-4 w-4" /><span>Profile</span></DropdownMenuItem>
+                <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /><span>Settings</span></DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => logoutMutation.mutate()}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => logoutMutation.mutate()}><LogOut className="mr-2 h-4 w-4" /><span>Log out</span></DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </header>
 
-        {/* Mobile Menu */}
+         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden fixed inset-0 z-50 bg-gray-800/50 dark:bg-black/50">
             <div className="absolute left-0 top-0 h-full w-64 bg-white dark:bg-gray-800 shadow-lg">
@@ -347,65 +263,21 @@ export default function Dashboard() {
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <h2 className="text-xl font-bold mb-4">Welcome to GuglyMail</h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  Your intelligent email client powered by AI. Get started by
-                  exploring your inbox or composing a new message.
+                  Your intelligent email client powered by AI. Get started by exploring your inbox or composing a new message.
                 </p>
-                <h2 className="text-xl font-bold mb-4">
-                  Your Connected Emails
-                </h2>
+                <h2 className="text-xl font-bold mb-4">Your Connected Emails</h2>
                 <div className="space-y-4">
                   {user && (
-                    <RegisteredEmails
-                      userId={String(user.id)}
-                      onEmailSelect={handleRefreshStats}
-                    />
+                    <RegisteredEmails userId={String(user.id)} onEmailSelect={handleRefreshStats} />
                   )}
                 </div>
-                {/* <div className="flex gap-3">
-                  <a href="/email">
-                    <Button>Go to Email Dashboard</Button>
-                  </a>
-                </div> */}
               </div>
-
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-                <h2 className="text-xl font-bold mb-4">
-                  Email Analytics
-                  {selectedEmail && (
-                    <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">
-                      ({selectedEmail})
-                    </span>
-                  )}
+                <h2 className="text-xl font-bold mb-4">Email Analytics
+                  {selectedEmail && <span className="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">({selectedEmail})</span>}
                 </h2>
-
-                <EmailStatistics
-                  labels={
-                    labels
-                    // // labelsQuery.data ||
-                    // [
-                    //   { id: 'INBOX', name: 'Inbox', type: 'system' },
-                    //   { id: 'SENT', name: 'Sent', type: 'system' },
-                    //   { id: 'DRAFT', name: 'Drafts', type: 'system' },
-                    //   { id: 'TRASH', name: 'Trash', type: 'system' },
-                    //   { id: 'IMPORTANT', name: 'Important', type: 'system' },
-                    //   { id: 'SPAM', name: 'Spam', type: 'system' },
-                    //   { id: 'CATEGORY_PERSONAL', name: 'Personal', type: 'category' },
-                    //   { id: 'CATEGORY_SOCIAL', name: 'Social', type: 'category' },
-                    //   { id: 'CATEGORY_PROMOTIONS', name: 'Promotions', type: 'category' }
-                    // ]
-                  }
-                  stats={
-                    stats
-                    //   [
-                    //   { labelId: 'INBOX', name: 'Inbox', total: 150, unread: 45, color: '#0088FE' },
-                    //   { labelId: 'SENT', name: 'Sent', total: 80, unread: 0, color: '#00C49F' },
-                    //   { labelId: 'DRAFT', name: 'Draft', total: 20, unread: 20, color: '#FFBB28' },
-                    //   { labelId: 'TRASH', name: 'Trash', total: 30, unread: 5, color: '#FF8042' }
-                    // ]
-                  }
-                />
+                <EmailStatistics labels={labels} stats={stats} />
               </div>
-
               <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <h2 className="text-xl font-bold mb-4">Email Intelligence</h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
@@ -465,8 +337,7 @@ export default function Dashboard() {
                   Try it now →
                 </a>
               </div>
-
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+     <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
                 <h2 className="text-xl font-bold mb-4">AI Tools</h2>
                 <ul className="space-y-2">
                   <li className="flex items-center space-x-2 p-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded">
@@ -544,8 +415,8 @@ export default function Dashboard() {
                   </li>
                 </ul>
               </div>
+            
             </div>
-
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
               <h2 className="text-xl font-bold mb-4">Recent Emails</h2>
               <div className="space-y-4">

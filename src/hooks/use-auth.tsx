@@ -76,6 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       );
       if (!response || !response.data) throw new Error("Login failed");
       const { name, email, profilePicture, _id } = response.data.data;
+      
       return {
         id: _id,
         fullName: name,
@@ -94,7 +95,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!response || !response.data) throw new Error("Login failed");
       return response.data;
     },
-    onSuccess: (userData: User) => {
+    onSuccess:async (userData: User) => {
       localStorage.setItem("userId", userData.id.toString());
       sessionStorage.setItem("userId", userData.id.toString());
       setUserId(userData.id.toString());
@@ -124,7 +125,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!response || !response.data) throw new Error("Registration failed");
       return response.data;
     },
-    onSuccess: (userData: User) => {
+    onSuccess: async (userData: User) => {
       localStorage.setItem("userId", userData.id.toString());
       sessionStorage.setItem("userId", userData.id.toString());
       setUserId(userData.id.toString());
@@ -147,7 +148,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
-      const storedUserId = localStorage.getItem("userId");
+      const storedUserId =localStorage.getItem("userId");
       const res = await axios.post(
         `${import.meta.env.VITE_AUTH_SERVICE_URL}/api/auth/logout`,
         {
@@ -157,7 +158,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!res) throw new Error("Logout failed");
       return res.data;
     },
-    onSuccess: (logoutData: LogoutOutput) => {
+    onSuccess:async (logoutData: LogoutOutput) => {
       localStorage.removeItem("userId");
       sessionStorage.removeItem("userId");
       localStorage.removeItem("regEmail");
