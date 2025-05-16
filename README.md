@@ -6,8 +6,8 @@ A powerful **AI-enhanced Email Client** that brings Gmail-like experience, combi
 
 ## 🔗 Source code Links
 
-- 🔥 **Project Demonstration**: [Video](https://drive.google.com/file/d/1mxYymA5k4GgklEe7vL0T6vKWKW6fF59g/view?usp=sharing)
-- 🔥 **Front End Monorepo S**: [https://front-end-monorepo-gugly-email-client.onrender.com/](https://front-end-monorepo-gugly-email-client.onrender.com/)
+- 🔥 **Product Demonstration**: [Video](https://drive.google.com/file/d/1mxYymA5k4GgklEe7vL0T6vKWKW6fF59g/view?usp=sharing)
+- 🔥 **Front End Monorepo**: [https://front-end-monorepo-gugly-email-client.onrender.com/](https://front-end-monorepo-gugly-email-client.onrender.com/)
 - 🔥 **AuthService BackEnd**: [https://github.com/gurpreetSingh4/auth-service_gugly-email-client](https://github.com/gurpreetSingh4/auth-service_gugly-email-client)
 - 🔥 **Email Service BackEnd**: [https://github.com/gurpreetSingh4/email-service-nest](https://github.com/gurpreetSingh4/email-service-nest)
 
